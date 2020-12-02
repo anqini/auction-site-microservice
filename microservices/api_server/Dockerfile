@@ -4,7 +4,5 @@ WORKDIR /src
 COPY . .
 RUN python3 -m pip install --upgrade pip 
 RUN python3 -m pip install -r requirements.txt
-RUN python3 -m pip install psycopg2-binary
-WORKDIR /src/service
-
-CMD nameko run --config config.yaml login
+WORKDIR /src/app
+EXPOSE 5000
