@@ -66,7 +66,8 @@ USER root
 WORKDIR /src/service
 CMD /etc/init.d/postgresql start &&\
     python3 ../db/create_postgres_dbs.py &&\
-    nameko run --config config.yaml item
+    python3 ../db/isolate_item_service.py &&\
+    nameko run --config config.yaml item shopping_cart
 
 
 

@@ -10,4 +10,6 @@ RUN python3 -m pip install -r requirements.txt
 RUN python3 -m pip install psycopg2-binary
 
 WORKDIR /src/service
-CMD mongod & python3 ../db/create_mongo_dbs.py;python3 ../db/isolate_admin_service.py;nameko run --config config.yaml admin
+CMD mongod & python3 ../db/create_mongo_dbs.py;\
+    python3 ../db/isolate_admin_service.py;\
+    nameko run --config config.yaml admin

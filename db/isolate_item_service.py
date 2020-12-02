@@ -13,6 +13,5 @@ def get_db_cursor(db_name):
 
 cursor = get_db_cursor("postgres")
 cursor.execute("DROP DATABASE IF EXISTS auction_db;")
-cursor.execute("DROP DATABASE IF EXISTS shopping_cart_db;")
 cursor.execute("DROP DATABASE IF EXISTS notification_db;")
 cursor.execute("DROP DATABASE IF EXISTS search_db;")
