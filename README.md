@@ -40,63 +40,53 @@ Django will generate an sqlite database by default, but we are not using it to s
 ### Descrption
 Based on python packages: Nameko, Flask, Pymongo, psycopg2, flasgger
 
-### Run Services
+### How to run backend microserivce
+Please open 8 seperate terminals and type two command in each terminal.
 
-1. Start Dockerized Services for Databases
+1. api_server
 ```
-//  RabbitMQ
-docker run -d --hostname my-rabbit --name some-rabbit -p 15672:15672 -p 5672:5672 rabbitmq:3-management
-// MongoDB
-docker run --hostname mongodb --name mongodb -p 27017:27017 -e MONGODB_PASS="password" -d mongo:3.4-xenial
-// PostgreSQL
-docker run -it -d --rm --name postgresql -e POSTGRES_USER=dbuser -e POSTGRES_DB=testdb  -e POSTGRES_PASSWORD=guest -p 5432:5432 -v $HOME/docker/volumes/postgres:/var/lib/postgresql/data  postgres
+docker build -t api_server -f microservices/api_server/Dockerfile .
+docker run -it --rm api_server -p 5000:5000 python3 api.py
 ```
 
-2. Populate Databases 
+2. login_service
 ```
-cd db
-python create_dbs.py
-```
-
-3. Checkout Databases to ensure the data has been populated (Check if you want)
-```
-docker exec -it mongodb /bin/bash
-mongo
-use admin_db
-db.admin.find()
-// You should see the initial data in admin collection in the output
-use user_db
-db.user.find()
-// You should see the initial data in user collection in the output
+docker build -t login_service -f microservices/login_service/Dockerfile .
+docker run -it --rm  login_service
 ```
 
+3. user_service
 ```
-docker exec -it postgresql /bin/bash
-psql -U dbuser -d item_db -h localhost
-\d
-select * from item;
-```
-
-4. Open and Check out API by using Swagger (might be dockerized later)
-```
-cd ../app
-python api.py
-```
-Open http://localhost:5000/apidocs/#/ in the browser, you can see the explanations and JSON models for each API. Also you can input your own JSON to test.
-
-5. Turn on microservices (can be dockerized on a container after things done)
-```
-cd ../service
-nameko run user admin item auction shopping_cart login search notification
+docker build -t user_service -f microservices/user_service/Dockerfile .
+docker run -it --rm  user_service 
 ```
 
-### Run Website
-Open your browser and connect to http://localhost:8000
-
-
-### Run Test for back-end
-In the back-end, we have implemented the user and admin's business logic. To test, please 
+4. admin_service
 ```
-cd ../test
-pytest
+docker build -t admin_service -f microservices/admin_service/Dockerfile .
+docker run -it --rm  admin_service
+```
+
+5. search_service
+```
+docker build -t search_service -f microservices/search_service/Dockerfile .
+docker run -it --rm search_service
+```
+
+6. item_service
+```
+docker build -t item_service -f microservices/item_service/Dockerfile .
+docker run -it --rm  item_service
+```
+
+7. notification_service
+```
+docker build -t notification_service -f microservices/notification_service/Dockerfile .
+docker run -it --rm notification_service
+```
+
+8. auction_service
+```
+docker build -t auction_service -f microservices/auction_service/Dockerfile .
+docker run -it --rm auction_service
 ```
